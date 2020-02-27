@@ -23,7 +23,7 @@
 hs_err_pid*
 
 *.project
-*.classpath
-*.gitattributes
-*.settings\org.eclipse.jdt.core.prefs
+.classpath
+.gitattributes
+.settings/
 
