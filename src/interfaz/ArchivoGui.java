@@ -4,10 +4,17 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class ArchivoGui {
 
@@ -16,7 +23,10 @@ public class ArchivoGui {
 	private JLabel lblTipoArchivo;
 	private JTextField textTipoArchivo;
 	private JLabel lblMensaje;
+	public JTextArea textAreaRsult;
 	private JTextField textBuscar;
+	private JTextArea textAreaMensaje;
+
 
 	/**
 	 * Launch the application.
@@ -50,60 +60,79 @@ public class ArchivoGui {
 		frmModuloParaGestionar.setBounds(100, 100, 947, 597);
 		frmModuloParaGestionar.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmModuloParaGestionar.getContentPane().setLayout(null);
-		
+
 		JLabel lblNombre = new JLabel("Nombre del Archivo");
 		lblNombre.setBounds(54, 44, 118, 16);
 		frmModuloParaGestionar.getContentPane().add(lblNombre);
-		
+
 		textNombre = new JTextField();
 		textNombre.setBounds(184, 41, 248, 30);
 		frmModuloParaGestionar.getContentPane().add(textNombre);
 		textNombre.setColumns(10);
-		
+
 		lblTipoArchivo = new JLabel("Tipo de extension");
 		lblTipoArchivo.setBounds(54, 101, 118, 16);
 		frmModuloParaGestionar.getContentPane().add(lblTipoArchivo);
-		
+
 		textTipoArchivo = new JTextField();
 		textTipoArchivo.setBounds(184, 98, 116, 30);
 		frmModuloParaGestionar.getContentPane().add(textTipoArchivo);
 		textTipoArchivo.setColumns(10);
-		
+
 		lblMensaje = new JLabel("Mensaje");
-		lblMensaje.setBounds(54, 179, 56, 16);
+		lblMensaje.setBounds(54, 158, 56, 16);
 		frmModuloParaGestionar.getContentPane().add(lblMensaje);
 		
-		JTextArea textAreaMensaje = new JTextArea();
-		textAreaMensaje.setBounds(54, 221, 378, 201);
+		textAreaMensaje = new JTextArea();
+		textAreaMensaje.setBounds(54, 187, 378, 255);
 		frmModuloParaGestionar.getContentPane().add(textAreaMensaje);
-		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(411, 221, 21, 201);
-		frmModuloParaGestionar.getContentPane().add(scrollBar);
-		
+
 		JButton btnCrear = new JButton("CREAR");
-		btnCrear.setBounds(218, 472, 97, 25);
+		btnCrear.setBounds(187, 476, 97, 25);
 		frmModuloParaGestionar.getContentPane().add(btnCrear);
-		
+
 		JLabel lblBuscar = new JLabel("Burcar Directorio/Archivo");
 		lblBuscar.setBounds(517, 29, 155, 16);
 		frmModuloParaGestionar.getContentPane().add(lblBuscar);
-		
+
 		textBuscar = new JTextField();
 		textBuscar.setBounds(517, 44, 378, 30);
 		frmModuloParaGestionar.getContentPane().add(textBuscar);
 		textBuscar.setColumns(10);
-		
+
 		JButton btnBuscar = new JButton("BUSCAR");
 		btnBuscar.setBounds(668, 87, 97, 25);
 		frmModuloParaGestionar.getContentPane().add(btnBuscar);
 		
-		JTextArea textAreaResultado = new JTextArea();
-		textAreaResultado.setBounds(517, 154, 378, 343);
-		frmModuloParaGestionar.getContentPane().add(textAreaResultado);
+		JTextArea textAreaRsult = new JTextArea();
+		textAreaRsult.setBounds(517, 155, 378, 332);
+		frmModuloParaGestionar.getContentPane().add(textAreaRsult);
+		//textAreaRsult.setColumns(10);
 		
-		JScrollBar scrollBar_1 = new JScrollBar();
-		scrollBar_1.setBounds(874, 166, 21, 331);
-		frmModuloParaGestionar.getContentPane().add(scrollBar_1);
+
+		// accion para escribir un archivo en java
+		btnCrear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String texto = textAreaMensaje.getText();
+				String nomArc = textNombre.getText();
+				String tipoArc = textTipoArchivo.getText();
+				
+				if (e.getSource() == btnCrear) {
+					File file = new File("C:\\ejemplo\\" + nomArc + "." + tipoArc);
+					
+					try {
+						FileWriter writer = new FileWriter(file);
+						PrintWriter escribir = new PrintWriter(writer);
+						escribir.append(texto);
+						JOptionPane.showMessageDialog(null, "El archivo ha sido creado con exito");
+						escribir.close();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+				}
+				
+				
+			}
+		});
 	}
 }
