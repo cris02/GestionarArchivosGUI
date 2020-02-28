@@ -10,7 +10,9 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollBar;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.awt.event.ActionEvent;
@@ -26,7 +28,6 @@ public class ArchivoGui {
 	public JTextArea textAreaRsult;
 	private JTextField textBuscar;
 	private JTextArea textAreaMensaje;
-
 
 	/**
 	 * Launch the application.
@@ -82,7 +83,7 @@ public class ArchivoGui {
 		lblMensaje = new JLabel("Mensaje");
 		lblMensaje.setBounds(54, 158, 56, 16);
 		frmModuloParaGestionar.getContentPane().add(lblMensaje);
-		
+
 		textAreaMensaje = new JTextArea();
 		textAreaMensaje.setBounds(54, 187, 378, 255);
 		frmModuloParaGestionar.getContentPane().add(textAreaMensaje);
@@ -103,12 +104,11 @@ public class ArchivoGui {
 		JButton btnBuscar = new JButton("BUSCAR");
 		btnBuscar.setBounds(668, 87, 97, 25);
 		frmModuloParaGestionar.getContentPane().add(btnBuscar);
-		
+
 		JTextArea textAreaRsult = new JTextArea();
 		textAreaRsult.setBounds(517, 155, 378, 332);
 		frmModuloParaGestionar.getContentPane().add(textAreaRsult);
-		//textAreaRsult.setColumns(10);
-		
+		// textAreaRsult.setColumns(10);
 
 		// accion para escribir un archivo en java
 		btnCrear.addActionListener(new ActionListener() {
@@ -116,10 +116,10 @@ public class ArchivoGui {
 				String texto = textAreaMensaje.getText();
 				String nomArc = textNombre.getText();
 				String tipoArc = textTipoArchivo.getText();
-				
+
 				if (e.getSource() == btnCrear) {
 					File file = new File("C:\\ejemplo\\" + nomArc + "." + tipoArc);
-					
+
 					try {
 						FileWriter writer = new FileWriter(file);
 						PrintWriter escribir = new PrintWriter(writer);
@@ -130,8 +130,54 @@ public class ArchivoGui {
 						// TODO: handle exception
 					}
 				}
-				
-				
+
+			}
+		});
+
+		// accion para leer un archivo por medio una direccion como parametro
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				if (e.getSource() == btnBuscar) {
+					File file = new File(textBuscar.getText());
+
+					if (file.exists()) {
+
+						textAreaRsult.setText("Nombre del archivo: " + file.getName());
+
+						if (file.isFile()) {
+							textAreaRsult.setText("Tipo de archivo: File");
+
+							try {
+								BufferedReader leer = new BufferedReader(new FileReader(file));
+								StringBuffer buffer = new StringBuffer();
+								String texto;
+								textAreaRsult.append(
+										"\n\n**************************************************************************************\n\n");
+
+								while ((texto = leer.readLine()) != null) {
+									buffer.append(texto + "\n");
+								}
+
+								textAreaRsult.append(buffer.toString());
+
+							} catch (Exception e2) {
+								// TODO: handle exception
+								JOptionPane.showInputDialog(null, "ERROR EN EL ARCHIVO");
+							}
+						}
+
+						if (file.isDirectory()) {
+							textAreaRsult.setText("Tipo de archivo: Directory");
+							String directorio[] = file.list();
+							textAreaRsult.append("\n\n ****** Archivos que contiene el directorio: *******\n");
+							for (int i = 0; i < directorio.length; i++) {
+								textAreaRsult.append("* " + directorio[i] + "\n");
+							}
+						}
+					} else
+						textAreaRsult.setText("El nombre del archivo no existe o no se ha encontrado");
+				}
 			}
 		});
 	}
